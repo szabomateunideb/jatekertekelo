@@ -1,4 +1,8 @@
 package hu.unideb.inf.jatekertekelo.data.repository;
 
-public interface JatekRepository {
+import hu.unideb.inf.jatekertekelo.data.entity.JatekEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface JatekRepository
+        extends JpaRepository<JatekEntity, Long> {
 }

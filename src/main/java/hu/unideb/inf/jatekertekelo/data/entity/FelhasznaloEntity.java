@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,4 +32,7 @@ public class FelhasznaloEntity {
     private String felhasznalonev;
     @Column(name = "pass_hash", length = 30, nullable = false)
     private String hash;
+
+    @OneToMany(mappedBy = "felhasznalo")
+    List<ErtekelesEntity> ertekelesek;
 }
