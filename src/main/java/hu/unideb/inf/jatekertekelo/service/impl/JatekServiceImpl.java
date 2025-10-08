@@ -5,9 +5,12 @@ import hu.unideb.inf.jatekertekelo.data.repository.JatekRepository;
 import hu.unideb.inf.jatekertekelo.service.JatekService;
 import hu.unideb.inf.jatekertekelo.service.dto.JatekCardDto;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,7 +49,13 @@ public class JatekServiceImpl implements JatekService {
 
     @Override
     public List<JatekCardDto> getAll() {
-        return List.of();
+        List<JatekEntity> jatekEntities = repo.findAll();
+
+        Type listType =
+                new TypeToken<List<JatekCardDto>>(){}.getType();
+        List<JatekCardDto> jatekCardDtos = modelMapper
+                .map(jatekEntities, listType);
+        return jatekCardDtos;
     }
 
     @Override
