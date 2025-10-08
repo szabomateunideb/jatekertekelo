@@ -24,7 +24,10 @@ public class JatekServiceImpl implements JatekService {
 
     @Override
     public JatekCardDto getById(Long id) {
-        return null;
+        JatekEntity jatekEntity = repo.getReferenceById(id);
+        JatekCardDto jatekCardDto = modelMapper
+                .map(jatekEntity, JatekCardDto.class);
+        return jatekCardDto;
     }
 
     @Override
