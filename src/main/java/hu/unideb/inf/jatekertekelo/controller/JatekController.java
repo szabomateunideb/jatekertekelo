@@ -23,4 +23,9 @@ public class JatekController {
     public JatekCardDto getById(@RequestParam Long id) {
         return jatekService.getById(id);
     }
+
+    @GetMapping("/byCim/{cim}")
+    public JatekCardDto getByCim(@PathVariable String cim) {
+        return jatekService.getByCim(cim);
+    }
 }

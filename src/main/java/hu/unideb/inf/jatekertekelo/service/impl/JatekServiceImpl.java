@@ -32,6 +32,15 @@ public class JatekServiceImpl implements JatekService {
 
     @Override
     public JatekCardDto getByCim(String cim) {
+        //JatekEntity e = repo.getByCim(cim);
+        //return modelMapper.map(e, JatekCardDto.class);
+
+        List<JatekEntity> jateks = repo.findAll();
+        for (JatekEntity jatekEntity : jateks) {
+            if (jatekEntity.getCim().equals(cim)) {
+                return modelMapper.map(jatekEntity, JatekCardDto.class);
+            }
+        }
         return null;
     }
 
