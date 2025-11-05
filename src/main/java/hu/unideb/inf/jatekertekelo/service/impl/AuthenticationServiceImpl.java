@@ -8,6 +8,11 @@ import hu.unideb.inf.jatekertekelo.service.AuthenticationService;
 import hu.unideb.inf.jatekertekelo.service.dto.BejelentkezesDto;
 import hu.unideb.inf.jatekertekelo.service.dto.RegisztracioDto;
 import hu.unideb.inf.jatekertekelo.service.mapper.FelhasznaloMapper;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -18,14 +23,27 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final FelhasznaloMapper felhMapper;
     private final JogosultsagRepository jogRepo;
     private final FelhasznaloRepository felhRepo;
+    private final AuthenticationManager authManager;
 
-    public AuthenticationServiceImpl(FelhasznaloMapper felhMapper, JogosultsagRepository jogRepo, FelhasznaloRepository felhRepo) {
+    public AuthenticationServiceImpl(FelhasznaloMapper felhMapper, JogosultsagRepository jogRepo, FelhasznaloRepository felhRepo, AuthenticationManager authManager) {
         this.felhMapper = felhMapper;
         this.jogRepo = jogRepo;
         this.felhRepo = felhRepo;
+        this.authManager = authManager;
     }
     @Override
     public void bejelentkezes(BejelentkezesDto dto) {
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+
+        Authentication auth = authManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        dto.getFelhasznalonev(),
+                        dto.getJelszo()
+                )
+        );
+
+        context.setAuthentication(auth);
+        SecurityContextHolder.setContext(context);
     }
 
     @Override
