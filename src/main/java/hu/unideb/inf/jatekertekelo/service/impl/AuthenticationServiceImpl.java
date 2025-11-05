@@ -8,29 +8,27 @@ import hu.unideb.inf.jatekertekelo.service.AuthenticationService;
 import hu.unideb.inf.jatekertekelo.service.dto.BejelentkezesDto;
 import hu.unideb.inf.jatekertekelo.service.dto.RegisztracioDto;
 import hu.unideb.inf.jatekertekelo.service.mapper.FelhasznaloMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final FelhasznaloMapper felhMapper;
     private final JogosultsagRepository jogRepo;
     private final FelhasznaloRepository felhRepo;
     private final AuthenticationManager authManager;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthenticationServiceImpl(FelhasznaloMapper felhMapper, JogosultsagRepository jogRepo, FelhasznaloRepository felhRepo, AuthenticationManager authManager) {
-        this.felhMapper = felhMapper;
-        this.jogRepo = jogRepo;
-        this.felhRepo = felhRepo;
-        this.authManager = authManager;
-    }
     @Override
     public void bejelentkezes(BejelentkezesDto dto) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
@@ -50,6 +48,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void regisztracio(RegisztracioDto dto) {
         FelhasznaloEntity e = felhMapper.regisztracioToEntity(dto);
         e.setRegisztracioDatum(Date.from(Instant.now()));
+        e.setHash(passwordEncoder.encode(e.getHash()));
+
 
         JogosultsagEntity jog = jogRepo.findByNev("FELHASZNALO");
         if(jog != null) {

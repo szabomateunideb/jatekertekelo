@@ -33,7 +33,7 @@ public class FelhasznaloEntity implements UserDetails {
     private Date regisztracioDatum;
     @Column(name = "username", length = 100, nullable = false)
     private String felhasznalonev;
-    @Column(name = "pass_hash", length = 30, nullable = false)
+    @Column(name = "pass_hash", nullable = false)
     private String hash;
 
     @OneToMany(mappedBy = "felhasznalo")
