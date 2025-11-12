@@ -23,6 +23,7 @@ public class JatekController {
     }
 
     @GetMapping("/byId")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public JatekCardDto getById(@RequestParam Long id) {
         return jatekService.getById(id);
     }
