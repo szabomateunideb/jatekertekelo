@@ -5,6 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.concurrent.ExecutorService;
+
 @SpringBootApplication
 public class JatekertekeloApplication {
 
@@ -16,4 +18,10 @@ public class JatekertekeloApplication {
 	ModelMapper modelMapper(){
 		return new ModelMapper();
 	}
+
+	@Bean
+	ExecutorService vts(){
+		return java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor();
+	}
+
 }

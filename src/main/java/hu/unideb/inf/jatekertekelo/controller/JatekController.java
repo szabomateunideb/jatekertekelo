@@ -2,6 +2,7 @@ package hu.unideb.inf.jatekertekelo.controller;
 
 import hu.unideb.inf.jatekertekelo.service.JatekService;
 import hu.unideb.inf.jatekertekelo.service.dto.JatekCardDto;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class JatekController {
     }
 
     @PostMapping("/save")
+    @PreAuthorize("hasAuthority('FELHASZNALO')")
     public JatekCardDto save(@RequestBody JatekCardDto jatek) {
         System.out.println("save jatek "+jatek);
         return jatekService.save(jatek);
