@@ -5,6 +5,7 @@ import hu.unideb.inf.jatekertekelo.data.entity.JogosultsagEntity;
 import hu.unideb.inf.jatekertekelo.data.repository.FelhasznaloRepository;
 import hu.unideb.inf.jatekertekelo.data.repository.JogosultsagRepository;
 import hu.unideb.inf.jatekertekelo.service.AuthenticationService;
+import hu.unideb.inf.jatekertekelo.service.TokenService;
 import hu.unideb.inf.jatekertekelo.service.dto.BejelentkezesDto;
 import hu.unideb.inf.jatekertekelo.service.dto.RegisztracioDto;
 import hu.unideb.inf.jatekertekelo.service.mapper.FelhasznaloMapper;
@@ -28,20 +29,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final FelhasznaloRepository felhRepo;
     private final AuthenticationManager authManager;
     private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
 
     @Override
-    public void bejelentkezes(BejelentkezesDto dto) {
+    public String bejelentkezes(BejelentkezesDto dto) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-
         Authentication auth = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         dto.getFelhasznalonev(),
                         dto.getJelszo()
                 )
         );
-
         context.setAuthentication(auth);
         SecurityContextHolder.setContext(context);
+
+        FelhasznaloEntity felh =
+                felhRepo.findByFelhasznalonev(dto.getFelhasznalonev());
+        return tokenService.generateToken(felh);
     }
 
     @Override

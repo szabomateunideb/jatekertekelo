@@ -16,6 +16,7 @@ public class JatekController {
 
     @PostMapping("/save")
     public JatekCardDto save(@RequestBody JatekCardDto jatek) {
+        System.out.println("save jatek "+jatek);
         return jatekService.save(jatek);
     }
 
